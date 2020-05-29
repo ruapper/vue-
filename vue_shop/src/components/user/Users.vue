@@ -3,9 +3,7 @@
     <!-- 面包屑导航区 -->
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>
-        <a href="/">用户管理</a>
-      </el-breadcrumb-item>
+      <el-breadcrumb-item>用户管理</el-breadcrumb-item>
       <el-breadcrumb-item>用户列表</el-breadcrumb-item>
     </el-breadcrumb>
 
@@ -278,7 +276,7 @@ export default {
         this.getUserList()
       })
     },
-    // 编辑对话框
+    // 编辑对话框获取内容
     async showEditDialog(id) {
       const { data: res } = await this.$http.get('users/' + id)
       if (res.meta.status !== 200) {
@@ -287,9 +285,11 @@ export default {
       this.editForm = res.data
       this.editDialog = true
     },
+    // 编辑对话框关闭重置
     editFormClose() {
       this.$refs.editFormRef.resetFields()
     },
+    // 编辑用户
     edituser() {
       this.$refs.editFormRef.validate(async valid => {
         if (!valid) return
@@ -341,15 +341,17 @@ export default {
       this.rolesList = res.data
       this.setRoleDialog = true
     },
+    // 分配权限
     async saveRoleInfo() {
       if (!this.selectRoleId) {
         return this.$message.error('请选择要分配的权限')
       }
-      const {
-        data: res
-      } = await this.$http.put(`users/${this.usersInfo.id}/role`, {
-        rid: this.selectRoleId
-      })
+      const { data: res } = await this.$http.put(
+        `users/${this.usersInfo.id}/role`,
+        {
+          rid: this.selectRoleId
+        }
+      )
       if (res.meta.status !== 200) {
         return this.$message.error('分配权限失败!')
       }
